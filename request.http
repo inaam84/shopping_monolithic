@@ -1,8 +1,14 @@
-POST http://localhost:8000/customer/signup HTTP/1.1
+POST http://localhost:8000/products/create HTTP/1.1
 content-type: application/json
+Authorization: Bearer-Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OGZmYzM3ZGM1Y2M2ODhjNjgxNWRmYiIsImVtYWlsIjoiaW5hYW1AaG90bWFpbC5jb20iLCJpYXQiOjE3MjA3MTIyNDcsImV4cCI6MTcyMDcxNTg0N30.vVDfjFG5SG4H6TkfxQClNhelTXznks7q4yqFWa0FfoA
 
 {
-    "username": "inaam.azmat",
-    "password": "secret",
-    "phone": "07415031519"
+    "name": "Apples",
+    "desc": "great Quality of Apple",
+    "type": "fruits",
+    "banner": "http://codergogoi.com/youtube/images/apples.jpeg",
+    "unit": 1,
+    "price": 140,
+    "available": true,
+    "supplier": "Golden seed firming"
 }

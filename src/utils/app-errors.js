@@ -6,73 +6,31 @@ const STATUS_CODES = {
     INTERNAL_ERROR: 500,
 };
 
-class AppError extends Error {
-    constructor(
-        name,
-        statuCode,
-        description,
-        isOperational,
-        errorStack,
-        logingErrorResponse
-    ) {
-        super(description);
-        Object.setPrototypeOf(this, new.target.prototype);
-        this.name = name;
-        this.statuCode = statuCode;
-        this.description = description;
-        this.isOperational = isOperational;
-        this.errorStack = errorStack;
-        this.logingErrorResponse = logingErrorResponse;
-    }
-}
-
-// API specifc errors
-class ApiError extends AppError {
-    constructor(
-        name,
-        statuCode = STATUS_CODES.INTERNAL_ERROR,
-        description = 'Internal Server Error',
-        isOperational = true
-    ) {
-        super(name, statuCode, description, isOperational);
+class ApiError extends Error {
+    constructor(message, details) {
+        super(message);
+        this.details = details;
+        this.name = this.constructor.name;
     }
 }
 
 // 400 
-class BadRequestError extends AppError {
-    constructor(
-        description = 'Bad Request',
-        logingErrorResponse
-    ) {
-        super(
-            'NOT Found',
-            STATUS_CODES.BAD_REQUEST,
-            description,
-            true,
-            false,
-            logingErrorResponse
-        );
+class BadRequestError extends ApiError {
+    constructor(message, details) {
+        super(message || 'Bad Request', details);
+        this.statusCode = STATUS_CODES.BAD_REQUEST;
     }
 }
 
 // 400 
-class ValidationError extends AppError {
-    constructor(
-        description = 'Validation Error',
-        errorStack
-    ) {
-        super(
-            'BAD REQUEST',
-            STATUS_CODES.BAD_REQUEST,
-            description,
-            true,
-            errorStack
-        );
+class ValidationError extends ApiError {
+    constructor(message, details) {
+        super(message || 'Validation Error', details);
+        this.statusCode = STATUS_CODES.BAD_REQUEST;
     }
 }
 
 module.exports = {
-    AppError,
     ApiError,
     BadRequestError,
     ValidationError,

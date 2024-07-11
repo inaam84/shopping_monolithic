@@ -1,6 +1,24 @@
+const ProductService = require('../services/product-service');
+const CustomerService = require('../services/customer-service');
+const { BadRequestError } = require('../utils/app-errors');
+const logger = require('../utils/logger');
+const UserAuth = require("./middlewares/auth");
+
+
 module.exports = (app) => {
-    app.get('/products/create', async (req, res, next) => {
-        return res.status(200).json({ 'api': 'create' });
+    const service = new ProductService();
+    const customerService = new CustomerService();
+
+    app.post('/products/create', async (req, res, next) => {
+        try {
+            const { name, desc, type, unit,price, available, supplier, banner } = req.body; 
+            // validation
+            const { data } =  await service.CreateProduct({ name, desc, type, unit,price, available, supplier, banner });
+            return res.json(data);
+            
+        } catch (err) {
+            next(err)    
+        }
     });
 
     app.get('/products/category/:type', async (req, res, next) => {
@@ -19,7 +37,13 @@ module.exports = (app) => {
         return res.status(200).json({ 'api': 'products wishlist' });
     });
 
-    app.get('/products', async (req, res, next) => {
-        return res.status(200).json({ 'api': 'top products' });
+    app.get('/products', UserAuth, async (req, res, next) => {
+        //check validation
+        try {
+            const { data} = await service.GetProducts();        
+            return res.status(200).json(data);
+        } catch (error) {
+            next(err)
+        }
     });
 }

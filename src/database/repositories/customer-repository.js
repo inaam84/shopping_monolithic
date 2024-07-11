@@ -1,5 +1,5 @@
 const { CustomerModel, AddressModel } = require('../models');
-const { ApiError, BadRequestError, STATUS_CODES } = require('../../utils/app-errors');
+const { ApiError, STATUS_CODES } = require('../../utils/app-errors');
 
 // Dealing with database operations
 class CustomerRepository {
@@ -26,7 +26,7 @@ class CustomerRepository {
         }
     }
 
-    async CreateAddress({ _id, street, postalCode, city, country }) {
+    async CreateAddress(_id, { street, postalCode, city, country }) {
         try {
             const profile = await CustomerModel.findById(_id);
 
@@ -61,7 +61,7 @@ class CustomerRepository {
 
     async FindCustomer({ email }) {
         try {
-            const existingCustomer = await CustomerModel.findOne({ email: email });
+            const existingCustomer = await CustomerModel.findOne({ email });
             return existingCustomer;
         } catch (error) {
             throw new ApiError(
